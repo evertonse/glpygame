@@ -1,6 +1,6 @@
 import numpy as np
 
-# >> Rotations 
+# >> Rotations on certain axis, given in homogenous cooodinates
 def rotatez(theta: float):
     cos = np.cos(theta)
     sin = np.sin(theta)
@@ -34,8 +34,8 @@ def rotatex(theta: float):
 # <<
 
 # >> Projetions
-
 def projective_transform(linear,translation, perspective, scale:int) -> np.ndarray:
+    """ Define a Homogenous Matrix given L, T, P, S as defined in the Text Book"""
     L = np.array(linear)
     T = np.array(translation)
     P = np.array(perspective)
@@ -47,13 +47,16 @@ def projective_transform(linear,translation, perspective, scale:int) -> np.ndarr
     ],dtype=float)
 
 
-def project_isometry(point, v) -> np.ndarray:
+def project_isometry(point, vector) -> np.ndarray:
+    """ Isometry Projection given a POINT and a vector"""
     p = point
+    v = vector
     t = -p[2]/v[2]
     return np.array([ p[0]+t*v[0], p[1]+t*v[1] ])
 
 
 def project_perspective(point, eye) -> np.ndarray: 
+    """ Pespective Projection given a POINT and a eye"""
     p = point - np.array(eye).reshape(point.shape)
     z = p[2]
     return np.array([p[0]/z, p[1]/z])

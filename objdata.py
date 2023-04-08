@@ -8,6 +8,7 @@ class ObjData:
     faces:  list[list[int]] 
 
     def from_obj(filename:str):
+        """Parse the .obj file format into vertices and faces"""
         vertices = []
         faces = []
 
@@ -26,6 +27,9 @@ class ObjData:
                     vertices.append(vertex)
                 elif line.startswith('f'):
                     face = [int(f.split('/')[0]) - 1 for f in line.split()[1:]]
+                    # Might have faces that are made with more than 3 vertices
+                    # we shoud just convert into more faces of 3 , using the algorithm 
+                    # I use in the .off parsing
                     assert(len(face) == 3 )
                     faces.append(face)
                 else:
@@ -33,15 +37,18 @@ class ObjData:
         return ObjData(vertices=vertices, faces=faces) 
     
     def from_off(filename:str):
+        """Parse the .off file format into vertices and faces"""
         try:
             with open(filename, 'r') as file:
-                # Read the first line to get the file format and the nber of vertices and faces
+                # First line tell us the file format 
                 file_format = file.readline().strip()
-                n_vertices, n_faces, n_edges = file.readline().strip().split()
                 if file_format.lower().count("off") == 0:
                     raise ValueError("Invalid file format. Expected OFF, got " + file_format)
 
-                # Read the vertices
+                # Next line tell us the number of vertices and faces
+                n_vertices, n_faces, n_edges = file.readline().strip().split()
+
+                # Vertices Parsing 
                 vertices = []
                 for _ in range(int(n_vertices)):
                     line = file.readline()
@@ -52,7 +59,7 @@ class ObjData:
                         raise ValueError(f"Invalid vertex dimension, expected 3 got {len(vertex)}, content: " + line)
                     vertices.append(vertex)
 
-                # Read the faces
+                # Faces Parsing 
                 faces = []
                 for _ in range(int(n_faces)):
                     line = file.readline()
@@ -62,7 +69,7 @@ class ObjData:
                     if n_vert_per_face < 3:
                         raise ValueError("Invalid face format: " + line)
                     if n_vert_per_face > 3:
-                        # Convert face with more than 3 vertices into triangles
+                        # Convert face with more than 3 vertices into triangles, using easiest way I know
                         for j in range(n_vert_per_face  - 2):
                             triangle = [face[0], face[j + 1], face[j + 2]]
                             faces.append(triangle)
@@ -76,7 +83,11 @@ class ObjData:
             raise ValueError(f"Value error {e}")
         
 def read_mesh(filepath, homogenous=False):
+    """Read a filepath and parse .obj or .off files, this function adds normals
+      and can optionally convert vertices into homogenous coordinates 
+    """
     ext = Path(filepath).suffix.lower()
+    # Checking supported types
     if ext in {'.off', 'off'}:
         obj = ObjData.from_off(filepath)
     elif ext in {'.obj', 'obj'}:
@@ -89,6 +100,7 @@ def read_mesh(filepath, homogenous=False):
 
     normals = []
     for face in faces:
+        # We manufacture normals gere
         v0, v1, v2 = vertices[face[0]], vertices[face[1]], vertices[face[2]]
         normal = np.cross(v2 - v0, v1 - v0)
         normal /= np.linalg.norm(normal)
@@ -101,6 +113,7 @@ def read_mesh(filepath, homogenous=False):
     vertices = vertices/max_val
 
     if homogenous:
+        # Add a bunch of ones if we want vectors in homogenous coordinates
         ones = np.ones(vertices.shape[0],dtype=np.float32)[:,np.newaxis]
         vertices = np.append(vertices, ones, axis=1)
 
