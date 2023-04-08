@@ -77,7 +77,7 @@ class App:
             pygame.K_x : False,
         }
 
-        clear_color = np.array([255,255,255,255])/255.0
+        clear_color = np.array([250,250,255,250])/255.0
         glClearColor(*clear_color) 
         glEnable(GL_DEPTH_TEST)
 
