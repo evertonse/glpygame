@@ -1,9 +1,11 @@
 # Need: 
-- pip install pyopengl
-- pip install pygame 
-- pip install numpy 
+- pip install **pyopengl**
+- pip install **pygame** 
+- pip install **numpy** 
 
 Tested with python 3.11, might work with previous versions
+
+
 
 # Run by one of the following:
 - `python3 main.py`  
@@ -11,6 +13,8 @@ Tested with python 3.11, might work with previous versions
 - `main.py`
 - `./main.py`
 - `.\main.py`
+
+
 
 # Commands Keys:
 - press `space` to stop rotating

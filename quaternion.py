@@ -32,7 +32,10 @@ class Quaternion:
         q = self
         v = Quaternion(0.0, vec[0], vec[1], vec[2])
         v = q * v * q.conjugate()
-        return np.array([v.x, v.y, v.z],dtype=float)
+        vec[0] = v.x
+        vec[1] = v.y
+        vec[2] = v.z
+        return  vec
 
     def conjugate(self):
         return Quaternion(self.w, -self.x, -self.y, -self.z)

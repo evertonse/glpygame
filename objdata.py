@@ -75,7 +75,7 @@ class ObjData:
         except ValueError as e:
             raise ValueError(f"Value error {e}")
         
-def read_mesh(filepath, normalize=False):
+def read_mesh(filepath, homogenous=False):
     ext = Path(filepath).suffix.lower()
     if ext in {'.off', 'off'}:
         obj = ObjData.from_off(filepath)
@@ -83,8 +83,8 @@ def read_mesh(filepath, normalize=False):
         obj = ObjData.from_obj(filepath)
     else:
         raise Exception("We Only support .obj or .off files")
-
-    vertices = np.array(obj.vertices,dtype=float)
+    
+    vertices = np.array(obj.vertices,dtype=np.float32)
     faces = np.array(obj.faces,dtype=int)  
 
     normals = []
@@ -93,9 +93,15 @@ def read_mesh(filepath, normalize=False):
         normal = np.cross(v2 - v0, v1 - v0)
         normal /= np.linalg.norm(normal)
         normals.append(normal)
-    
-    normals = np.array(normals,dtype=float)  
+    normals = np.array(normals,dtype=np.float32)  
+
     abs_max = np.abs(vertices.max())
     abs_min = np.abs(vertices.min())
     max_val = max(abs_max, abs_min)
-    return vertices/max_val, faces, normals
+    vertices = vertices/max_val
+
+    if homogenous:
+        ones = np.ones(vertices.shape[0],dtype=np.float32)[:,np.newaxis]
+        vertices = np.append(vertices, ones, axis=1)
+
+    return vertices, faces, normals
