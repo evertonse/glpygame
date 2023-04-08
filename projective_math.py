@@ -47,7 +47,6 @@ def projective_transform(linear,translation, perspective, scale:int) -> np.ndarr
     ],dtype=float)
 
 
-
 def project_isometry(point, v) -> np.ndarray:
     p = point
     t = -p[2]/v[2]

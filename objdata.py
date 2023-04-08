@@ -1,4 +1,6 @@
 from dataclasses import dataclass 
+from pathlib import Path
+import numpy as np
 
 @dataclass
 class ObjData:
@@ -73,3 +75,27 @@ class ObjData:
         except ValueError as e:
             raise ValueError(f"Value error {e}")
         
+def read_mesh(filepath, normalize=False):
+    ext = Path(filepath).suffix.lower()
+    if ext in {'.off', 'off'}:
+        obj = ObjData.from_off(filepath)
+    elif ext in {'.obj', 'obj'}:
+        obj = ObjData.from_obj(filepath)
+    else:
+        raise Exception("We Only support .obj or .off files")
+
+    vertices = np.array(obj.vertices,dtype=float)
+    faces = np.array(obj.faces,dtype=int)  
+
+    normals = []
+    for face in faces:
+        v0, v1, v2 = vertices[face[0]], vertices[face[1]], vertices[face[2]]
+        normal = np.cross(v2 - v0, v1 - v0)
+        normal /= np.linalg.norm(normal)
+        normals.append(normal)
+    
+    normals = np.array(normals,dtype=float)  
+    abs_max = np.abs(vertices.max())
+    abs_min = np.abs(vertices.min())
+    max_val = max(abs_max, abs_min)
+    return vertices/max_val, faces, normals

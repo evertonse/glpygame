@@ -1,2 +1,2 @@
-import opengl as app 
+import application as app 
 app.main()
