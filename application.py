@@ -226,6 +226,7 @@ def main():
     # might need to change the window_size in case monitor isnt 600x600
     window_size = (600, 600)
     pygame.display.set_mode(window_size, DOUBLEBUF | OPENGL)
+    glViewport(0,0,*window_size)
 
     # Create App and initialize
     app = App()
