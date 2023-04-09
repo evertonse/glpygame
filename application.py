@@ -62,7 +62,7 @@ class App:
         # But I left this here as a demonstrations that we can just multiply 
         # the quaternions and vector as usual, no problem i.e -> q v q*
         # if this variable is set to True it'll use the matrix, otherwise
-        # it'll to they quaternion multiplication
+        # it'll do the quaternion multiplication instead
         self.use_quaternion_matrix = True 
 
 
