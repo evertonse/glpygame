@@ -1,0 +1,16 @@
+pq = 
+        w = 0  q_0 - p_1  q_1 - p_2  q_2 - p_3  q_3
+        x = 0  q_1 + p_1  q_0 + p_2  q_3 - p_3  q_2
+        y = 0  q_2 - p_1  q_3 + p_2  q_0 + p_3  q_1
+        z = 0  q_3 + p_1  q_2 - p_2  q_1 + p_3  q_0
+
+
+qp =
+        &q_0 \cdot 0 - q_1 \cdot p_1 - q_2 \cdot p_2 - q_3 \cdot p_3\\
+        +&(q_0 \cdot p_1 + q_1 \cdot 0 + q_2 \cdot p_3 - q_3 \cdot p_2)i\\
+        +&(q_0 \cdot p_2 - q_1 \cdot p_3 + q_2 \cdot 0 + q_3 \cdot p_1)j\\
+        +&(q_0 \cdot p_3 + q_1 \cdot p_2 - q_2 \cdot p_1 + q_3 \cdot 0)k\\
+
+
+
+- q_1 \cdot p_1 - q_2 \cdot p_2 - q_3 \cdot p_3\\
