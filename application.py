@@ -21,17 +21,24 @@ from quaternion import Quaternion
 # I recommend suzanne, because has an interesnting shape and
 # it's fast. if you change the last value to another string
 # it'll render another object
-mesh_files = [
+slow_mesh_files = [
     'assets/rabbit.obj',    # Slow
     'assets/teapot.obj',    # Slow
     'assets/cat.obj',       # Slow 
+    'assets/bunny.off',     # Slow 
+    'assets/DragonCartoon.obj',    # Slow
+]
+
+mesh_files = [
     'assets/torus.obj',     # Fast
     'assets/cinda.obj',     # Fast
     'assets/samoyed.obj',   # Fast
-    'assets/bunny.off',     # Slow 
     'assets/suzanne.obj',   # Fast
+    'assets/bunny_low_poly.obj',   # Fast
 ]
+
 mesh_file = mesh_files[-1]
+mesh_file = slow_mesh_files[-1]
 
 # Global variables for  Vertices Nomals and Faces, that were read 
 # and parsed from mesh files 
@@ -197,7 +204,8 @@ class App:
             v1 /= v1[-1]
             v2 /= v2[-1]
 
-            # Take only the first 3 coordinates
+            # Take only the first 3 coordinates, 
+            # optionally we could just call  glVertex4f
             v0 = v0[:-1]
             v1 = v1[:-1]
             v2 = v2[:-1]
